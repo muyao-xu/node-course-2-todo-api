@@ -85,6 +85,30 @@ UserSchema.statics.findByToken = function (token) {
 	});
 };
 
+UserSchema.statics.findByCredentials = function (email, password) {
+	var User = this;
+
+	return User.findOne({email}).then((user) => {
+		if (!user) {
+			console.log('no user exist');
+			return Promise.reject();
+		}
+
+		return new Promise((resolve, reject) => {
+			bcrypt.compare(password, user.password, (err, result) => {
+				if (result) {
+					console.log('correct!');
+					console.log(user);
+					resolve(user);
+				} else {
+					reject();
+				}
+			});
+		});
+
+	});
+};
+
 // override the method
 UserSchema.methods.toJSON = function () {
 	var user = this;
