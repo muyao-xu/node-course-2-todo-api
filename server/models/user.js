@@ -103,15 +103,12 @@ UserSchema.statics.findByCredentials = function (email, password) {
 
 	return User.findOne({email}).then((user) => {
 		if (!user) {
-			console.log('no user exist');
 			return Promise.reject();
 		}
 
 		return new Promise((resolve, reject) => {
 			bcrypt.compare(password, user.password, (err, result) => {
 				if (result) {
-					console.log('correct!');
-					console.log(user);
 					resolve(user);
 				} else {
 					reject();
